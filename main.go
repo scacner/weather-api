@@ -14,15 +14,22 @@ import (
 	"github.com/swaggest/usecase/status"
 )
 
-// Main function to set up and start the Weather API service.
-func main() {
-	s := web.NewService(openapi3.NewReflector())
+// getTemperatureCategory categorizes temperature into "cold" (<40F), "moderate" (40-80F), or "hot" (>=80F).
+func getTemperatureCategory(temp float64) (string, error) {
+	switch {
+	case temp < 40:
+		return "cold", nil
+	case temp >= 40 && temp < 80:
+		return "moderate", nil
+	case temp >= 80:
+		return "hot", nil
+	default:
+		return "nil", errors.New("unable to determine temperature category")
+	}
+}
 
-	// Init API documentation schema
-	s.OpenAPISchema().SetTitle("Weather API")
-	s.OpenAPISchema().SetDescription("Uses the NWS API to provide weather information.")
-	s.OpenAPISchema().SetVersion("v0.0.1")
-
+// getCurrentWeather defines a use case interactor to get current weather information.
+func getCurrentWeather() usecase.Interactor {
 	// Declare input type
 	type currentInput struct {
 		Latitude  float64 `query:"latitude" description:"Latitude of the latitude"`
@@ -59,8 +66,20 @@ func main() {
 
 	u.SetExpectedErrors(status.Internal)
 
+	return u
+}
+
+// Main function to set up and start the Weather API service.
+func main() {
+	s := web.NewService(openapi3.NewReflector())
+
+	// Init API documentation schema
+	s.OpenAPISchema().SetTitle("Weather API")
+	s.OpenAPISchema().SetDescription("Uses the NWS API to provide weather information.")
+	s.OpenAPISchema().SetVersion("v0.0.1")
+
 	// Add use case handler to router
-	s.Get("/current", u)
+	s.Get("/current", getCurrentWeather())
 
 	// Swagger UI endpoint at /docs
 	s.Docs("/docs", swgui.New)
