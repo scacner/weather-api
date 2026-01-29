@@ -2,6 +2,7 @@ package nwsapi
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -9,6 +10,8 @@ import (
 )
 
 const userAgent = "(github.com/scacner/weather-api)"
+
+var NotFoundErr = errors.New("no forecast data found for the provided coordinates")
 
 // PointResponse is a simplified subset of the NWS API /points endpoint response
 type PointResponse struct {
@@ -49,6 +52,10 @@ func getNWSForecastURL(lat, lon float64) (string, error) {
 		return "", err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusNotFound {
+		return "", NotFoundErr
+	}
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
