@@ -87,7 +87,7 @@ func main() {
 
 	// Init API documentation schema
 	s.OpenAPISchema().SetTitle("Weather API")
-	s.OpenAPISchema().SetDescription("Uses the NWS API to provide weather information.")
+	s.OpenAPISchema().SetDescription("Uses the National Weather Service API Web Service to provide weather information.")
 	s.OpenAPISchema().SetVersion("v0.0.1")
 
 	// Add use case handler to router
