@@ -65,7 +65,7 @@ func getNWSForecastURL(lat, lon float64) (string, error) {
 	}
 
 	// Add units=us parameter for Fahrenheit
-	forecastURL := fmt.Sprintf("%s?units= us", point.Properties.Forecast)
+	forecastURL := fmt.Sprintf("%s?units=us", point.Properties.Forecast)
 
 	return forecastURL, nil
 }
