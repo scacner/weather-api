@@ -59,8 +59,14 @@ func getCurrentWeather() usecase.Interactor {
 		// Print today's forecast as example
 		if len(forecast.Properties.Periods) > 0 {
 			period := forecast.Properties.Periods[0]
+
+			tempRange, err := getTemperatureCategory(period.Temperature)
+			if err != nil {
+				return status.Wrap(err, status.Internal)
+			}
+
 			output.CurrentShortForecast = period.ShortForecast
-			output.CurrentTemperature = fmt.Sprintf("%.0f", period.Temperature)
+			output.CurrentTemperatureRange = tempRange
 		}
 
 		return nil
