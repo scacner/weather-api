@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"log"
 	"net/http"
 
@@ -47,7 +47,13 @@ func getCurrentWeather() usecase.Interactor {
 		// Example: Rochester, NY approx coords (43.1567, -77.6148)
 		forecast, err := nwsapi.GetNWSForecast(input.Latitude, input.Longitude)
 		if err != nil {
-			return status.Wrap(err, status.Internal)
+			statusCode := status.Internal
+
+			if errors.Is(err, nwsapi.NotFoundErr) {
+				statusCode = status.NotFound
+			}
+
+			return status.Wrap(err, statusCode)
 		}
 
 		// Print today's forecast as example
