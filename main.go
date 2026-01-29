@@ -32,8 +32,8 @@ func getTemperatureCategory(temp float64) (string, error) {
 func getCurrentWeather() usecase.Interactor {
 	// Declare input type
 	type currentInput struct {
-		Latitude  float64 `query:"latitude" description:"Latitude of the latitude"`
-		Longitude float64 `query:"longitude" description:"Longitude of the latitude"`
+		Latitude  float64 `query:"latitude" description:"Latitude of the coordinate being queried. Positive values are north of the equator, negative values are south."`
+		Longitude float64 `query:"longitude" description:"Longitude of the coordinate being queried. Positive values are east of the Prime Meridian, negative values are west."`
 	}
 
 	// Declare output type
@@ -64,7 +64,7 @@ func getCurrentWeather() usecase.Interactor {
 	u.SetTitle("Current Weather")
 	u.SetDescription("Get current weather information for given latitude and longitude.")
 
-	u.SetExpectedErrors(status.Internal)
+	u.SetExpectedErrors(status.NotFound, status.Internal)
 
 	return u
 }
