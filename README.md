@@ -1,14 +1,27 @@
-# weather-api
+# Weather API
+An HTTP server that serves the current weather for a provided set of latitude and longitude coordinates. Uses the [National Weather Service API Web Service](https://www.weather.gov/documentation/services-web-api) as a data source. The server returns the current short forecast for the provided area for Today (e.g. “Partly Cloudy”) and a characterization of whether the temperature is cold (less than 40F), "moderate" (at or above 40F and less than 80F), or "hot" (at or above 80F)
 
-Project Submission - Weather Service Assignment
-Write an HTTP server that serves the current weather. Your server should expose an endpoint that:
-1. Accepts latitude and longitude coordinates
-2. Returns the short forecast for that area for Today (“Partly Cloudy” etc)
-3. Returns a characterization of whether the temperature is “hot”, “cold”, or “moderate” (use your discretion on mapping temperatures to each type)
-4. Use the [National Weather Service API Web Service](https://www.weather.gov/documentation/services-web-api) as a data source.
+This HTTP server is built using the [Swaggest REST](https://github.com/swaggest/rest) library to provide OpenAPI documentation for the API. I enjoy using Swaggest for building APIs in Go as it provides a great developer experience and makes it easy to keep API documentation in sync with the code.
 
-The purpose of this exercise is to provide a sample of your work that we can discuss together in the Technical Interview.
-- We respect your time. Spend as long as you need, but we intend it to take around an hour.
-- We do not expect a production-ready service, but you might want to comment on your shortcuts.
-- The submitted project should build and have brief instructions so we can verify that it works.
-- You may write in whatever language or stack you're most comfortable in, but it's recommended to use the language for the job you're applying for (Go).
+When running this app, an API Spec can be viewed at http://localhost:8080/docs
+
+## Running API Locally
+To run locally, `go` needs to be installed on the local machine. The app can be ran with the following command:
+
+```shell
+go run main.go
+```
+
+A Makefile has also been provided. If the local machine supports the `make` command, simply run the following command instead:
+
+```shell
+make run
+```
+
+## Example Call
+An example call to the API for the Rochester, NY area is shown below:
+
+```shell
+$ curl "http://localhost:8080/current?latitude=43.1567&longitude=-77.6148"
+{"current_short_forecast":"Snow","current_temperature_range":"cold"}
+```
