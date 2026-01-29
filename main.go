@@ -38,8 +38,8 @@ func getCurrentWeather() usecase.Interactor {
 
 	// Declare output type
 	type currentOutput struct {
-		CurrentShortForecast string `json:"current_short_forecast"`
-		CurrentTemperature   string `json:"current_temperature"`
+		CurrentShortForecast    string `json:"current_short_forecast"`
+		CurrentTemperatureRange string `json:"current_temperature_range"`
 	}
 
 	// Create use case interactor with references to input/output types and interaction function.
